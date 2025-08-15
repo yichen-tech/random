@@ -1,0 +1,106 @@
+import random
+import gradio as gr
+
+def generate_random_chinese_string(length=4):
+    """Generates a random Traditional Chinese string of a given length."""
+    # Unicode range for common Traditional Chinese characters
+    chinese_chars = [chr(i) for i in range(0x4E00, 0x9FFF + 1)]
+    return ''.join(random.choice(chinese_chars) for _ in range(length))
+
+# Define the character, location, and action lists
+characters = ['Yi', 'Penny', 'Nick', 'Lilly', '帥哥']
+# Add the 100 specific Traditional Chinese characters
+specific_chinese_chars = [
+    '警察', '消防員', '醫生', '護士', '教師', '校長', '律師', '法官', '軍人', '空軍飛行員',
+    '海軍士兵', '工程師', '軟體開發員', '建築師', '設計師', '藝術家', '音樂家', '作家', '記者', '攝影師',
+    '演員', '導演', '舞蹈家', '模特兒', '運動員', '教練', '體育裁判', '銀行家', '投資顧問', '股票分析師',
+    '廚師', '麵包師傅', '酒保', '餐廳經理', '服務生', '理髮師', '美容師', '美甲師', '牙醫', '眼科醫生',
+    '藥師', '心理學家', '社工', '營養師', '物理治療師', '運動教練', '導遊', '飯店經理', '司機', '卡車司機',
+    '計程車司機', '公車司機', '鐵路員工', '飛機機師', '空服員', '環境保護員', '農夫', '漁夫', '園丁', '牧羊人',
+    '寵物訓練師', '動物醫生', '獸醫', '法醫', '偵探', '保全', '消防隊長', '警察局長', '政治家', '市長',
+    '國會議員', '總統', '部長', '大使', '外交官', '商人', '創業家', 'CEO', 'CFO', '投資人',
+    '記帳員', '出納', '會計師', '律師助理', '秘書', '行政助理', '助教', '大學教授', '小學老師', '幼兒園老師',
+    '司儀', '主播', '廣播員', '運動員經理', '裁縫', '珠寶設計師', '漫畫家', '遊戲開發員', '科學家', '研究員'
+]
+characters.extend(specific_chinese_chars)
+
+
+locations = [
+    '交易室', 'RM 辦公室', '網咖', '火星', '更衣室', '體育館', '健身房', '游泳池', '沙灘', '森林',
+    '公園', '動物園', '博物館', '美術館', '圖書館', '書店', '咖啡廳', '餐廳', '酒吧', '夜店',
+    '火車站', '地鐵站', '公車站', '機場', '停車場', '加油站', '高速公路', '市中心廣場', '校園', '教室',
+    '實驗室', '手術室', '醫院大廳', '警察局', '消防局', '法院', '法庭', '酒店大堂', '豪宅客廳', '地下室',
+    '倉庫', '車庫', '屋頂', '天台花園', '沙漠', '山洞', '山頂', '河邊', '湖邊', '海底',
+    '太空船內部', '太空站', '外太空', '月球', '科學研究站', '廣播室', '電影拍攝現場', '舞台', '劇院', '音樂廳',
+    '演播室', '工作室', '工廠', '倉庫工廠', '農場', '果園', '花園', '溫室', '市場', '超市',
+    '便利商店', '露天市集', '鐵路車廂', '巴士車廂', '計程車內', '卡車內', '船艙', '港口', '碼頭', '鬧市街道',
+    '小巷', '廢墟', '廢棄工廠', '廢棄醫院', '廢棄學校', '密室', '實驗室密室', '神秘洞穴', '古堡', '城堡大廳',
+    '王宮', '寺廟', '教堂', '清真寺', '廟宇', '森林小屋', '湖畔木屋', '雪山營地', 'Lilly的座位', 'Penny的座位',
+    'Nick的座位', 'Yi的座位', '帥哥的座位'
+]
+
+actions = [
+    '努力工作', '呼呼大睡', '跳陣頭', '拉小提琴', '吃零食', '喝咖啡', '打電腦遊戲', '練吉他', '唱歌', '跳舞',
+    '畫畫', '寫小說', '寫日記', '做瑜伽', '跑步', '健身', '做仰臥起坐', '打籃球', '踢足球', '游泳',
+    '騎單車', '騎摩托車', '開車', '開會', '打電話', '回簡訊', '發電子郵件', '上課', '補習', '看書',
+    '讀報', '寫報告', '做簡報', '設計海報', '拍攝影片', '剪輯影片', '拍照', '修照片', '擺拍', '做手工藝',
+    '縫紉', '編織', '做陶藝', '做模型', '玩桌遊', '玩撲克牌', '玩棋類', '做數學題', '解謎', '玩拼圖',
+    '玩積木', '看電影', '追劇', '看動畫', '看漫畫', '聽音樂', '練口琴', '練長笛', '練鋼琴', '練架子鼓',
+    '做飯', '烤蛋糕', '煮咖啡', '泡茶', '擺盤', '吃晚餐', '吃早餐', '吃午餐', '喝水', '吃水果',
+    '吃冰淇淋', '吃巧克力', '吃蛋糕', '做瑜伽伸展', '打太極', '練氣功', '拍照打卡', '拍影片上傳', '發貼文', '直播',
+    '逛街', '買衣服', '買鞋子', '買包包', '買零食', '買文具', '購物比價', '支付帳單', '存錢', '投資',
+    '查股票', '看基金', '看加密貨幣', '設定鬧鐘', '收拾房間', '擦窗戶', '拖地', '掃地', '倒垃圾', '澆花',
+    '種植', '除草', '收割', '釣魚', '看日出', '看日落', '看星星', '看月亮', '散步', '跑山路',
+    '登山', '野餐', '烤肉', '露營', '生火', '搭帳篷', '玩飛盤', '打羽毛球', '打網球', '打高爾夫',
+    '滑雪', '滑板', '滑水', '潛水', '衝浪', '拖曳傘', '騎馬', '餵動物', '拍動物照', '觀察鳥類',
+    '捕蟲', '玩紙飛機', '玩遙控車', '玩遙控飛機', '玩遙控船', '逛博物館', '逛美術館', '看展覽', '聽演唱會', '聽講座',
+    '參加工作坊', '學烘焙', '學畫畫', '學樂器', '學跳舞', '學外語', '練口語', '寫作練習', '做報告', '做專題研究',
+    '做實驗', '觀察自然', '拍影片紀錄', '訪問路人', '採訪專家', '記錄筆記', '做筆記整理', '做資料整理', '做市場分析',
+    '研究新聞', '查資料', '查字典', '查百科', '查網頁', '上課學習', '聽線上課程', '做題目', '練習寫程式', '寫程式',
+    'Debug', '測試程式', '做專案', '寫企劃', '設計流程', '設計介面', '設計圖示', '設計動畫', '製作海報', '設計LOGO',
+    '設計名片', '設計包裝', '設計衣服', '設計家具', '設計房間', '裝修房子', '清潔房間', '整理衣櫃', '整理書櫃', '整理桌面',
+    '整理電腦檔案', '備份資料', '做設計', '升級系統', '玩手機', '玩平板', '炒股票', '買ETH', '聊天', '打架'
+]
+
+
+def generate_sentence():
+    """Generates a random sentence in Traditional Chinese."""
+    required_chars = ['Yi', 'Penny', 'Nick', 'Lilly', '帥哥']
+    location = random.choice(locations)
+    action = random.choice(actions)
+
+    # Randomly decide whether to choose one or two characters
+    num_chars = random.choice([1, 2])
+
+    if num_chars == 1:
+        # Ensure the selected character is one of the required five
+        character1 = random.choice(required_chars)
+        sentence = f"{character1} 在 {location} {action}"
+    else:
+        # Ensure the first character is one of the required five
+        character1 = random.choice(required_chars)
+
+        # Select a second character different from the first
+        character2 = random.choice([char for char in characters if char != character1])
+
+        sentence = f"{character1} 和 {character2} 在 {location} {action}"
+
+    return sentence
+
+css = """
+button {
+  background-color: #003b4c !important;
+  color: white !important;
+}
+"""
+
+iface = gr.Interface(
+    fn=generate_sentence,
+    inputs=None,
+    outputs=gr.Textbox(label=None),
+    title=None,
+    allow_flagging="never",
+    css=css
+)
+
+iface.launch(share=True) # Set share=True for Colab environment
